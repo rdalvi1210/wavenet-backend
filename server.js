@@ -12,10 +12,7 @@ const groupRoutes = require("./routes/group.routes");
 const app = express();
 app.use(
   cors({
-    origin: [
-      "https://wavenet-frontend.vercel.app/",
-      "https://wavenet-frontend.vercel.app",
-    ],
+    origin: ["https://wavenet-frontend.vercel.app"],
     credentials: true,
   })
 );
