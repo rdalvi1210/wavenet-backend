@@ -20,12 +20,15 @@ function sendTokenResponse(user, res) {
 
   // const isProduction = process.env.NODE_ENV === "production";
 
-  res.cookie(TOKEN_COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-    maxAge: 24 * 60 * 60 * 1000,
-  });
+ res.cookie(TOKEN_COOKIE_NAME, token, {
+   httpOnly: true,
+   secure: true,
+   sameSite: "none",
+   path: "/",
+   partitioned: true,
+   maxAge: 24 * 60 * 60 * 1000,
+ });
+
 
   // We send basic user info back
   res.status(200).json({

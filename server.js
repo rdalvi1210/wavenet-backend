@@ -10,12 +10,11 @@ const invoiceRoutes = require("./routes/invoice.routes");
 const groupRoutes = require("./routes/group.routes");
 
 const app = express();
+app.set("trust proxy", 1);
 app.use(
   cors({
     origin: "https://wavenet-frontend.vercel.app",
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
