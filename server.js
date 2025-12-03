@@ -12,7 +12,10 @@ const groupRoutes = require("./routes/group.routes");
 const app = express();
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://your-frontend-domain.com"],
+    origin: [
+      "https://wavenet-frontend-dioppowfq-ramchandras-projects-b949c6e3.vercel.app",
+      "https://your-frontend-domain.com",
+    ],
     credentials: true,
   })
 );
