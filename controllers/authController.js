@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const { TOKEN_COOKIE_NAME } = require('../middleware/auth');
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+const { TOKEN_COOKIE_NAME } = require("../middleware/auth");
 
 function signToken(user) {
   return jwt.sign(
@@ -10,7 +10,7 @@ function signToken(user) {
     },
     process.env.JWT_SECRET,
     {
-      expiresIn: '1d',
+      expiresIn: "1d",
     }
   );
 }
@@ -18,18 +18,18 @@ function signToken(user) {
 function sendTokenResponse(user, res) {
   const token = signToken(user);
 
-  const isProduction = process.env.NODE_ENV === 'production';
+  // const isProduction = process.env.NODE_ENV === "production";
 
   res.cookie(TOKEN_COOKIE_NAME, token, {
     httpOnly: true,
-    secure: isProduction,
-    sameSite: isProduction ? 'none' : 'lax',
+    secure: true,
+    sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000,
   });
 
   // We send basic user info back
   res.status(200).json({
-    message: 'Login successful',
+    message: "Login successful",
     user: {
       id: user._id,
       userId: user.userId,
@@ -45,14 +45,16 @@ async function login(req, res) {
     const { email, password, timezoneOffsetMinutes } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required.' });
+      return res
+        .status(400)
+        .json({ message: "Email and password are required." });
     }
 
     // Basic time zone validation
-    if (typeof timezoneOffsetMinutes !== 'number') {
-      return res
-        .status(400)
-        .json({ message: 'timezoneOffsetMinutes (number) is required for login.' });
+    if (typeof timezoneOffsetMinutes !== "number") {
+      return res.status(400).json({
+        message: "timezoneOffsetMinutes (number) is required for login.",
+      });
     }
 
     if (timezoneOffsetMinutes !== -330 && timezoneOffsetMinutes !== 330) {
@@ -60,26 +62,26 @@ async function login(req, res) {
       // IST is typically -330 in that representation.
       return res.status(400).json({
         message:
-          'Invalid time zone. Please ensure your system time zone is set to India Standard Time (UTC+5:30).',
+          "Invalid time zone. Please ensure your system time zone is set to India Standard Time (UTC+5:30).",
       });
     }
 
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
-      return res.status(400).json({ message: 'Invalid email or password.' });
+      return res.status(400).json({ message: "Invalid email or password." });
     }
 
     const isMatch = await user.comparePassword(password);
 
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid email or password.' });
+      return res.status(400).json({ message: "Invalid email or password." });
     }
 
     sendTokenResponse(user, res);
   } catch (err) {
-    console.error('Login error:', err.message);
-    res.status(500).json({ message: 'Something went wrong during login.' });
+    console.error("Login error:", err.message);
+    res.status(500).json({ message: "Something went wrong during login." });
   }
 }
 
