@@ -13,8 +13,8 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "https://wavenet-frontend-dioppowfq-ramchandras-projects-b949c6e3.vercel.app",
-      "https://your-frontend-domain.com",
+      "https://wavenet-frontend.vercel.app/",
+      "https://wavenet-frontend.vercel.app",
     ],
     credentials: true,
   })
